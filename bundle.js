@@ -27334,7 +27334,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 exports.i(__webpack_require__(223), "");
 
 // module
-exports.push([module.i, "body,ul,li,h1,h2,h3,h4,h5,p {\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\n\r\nh1 {\r\n    text-align: center;\r\n    margin-top: 200px;\r\n}\r\n\r\n.app .false{\r\n    display: none;\r\n}", ""]);
+exports.push([module.i, "body,ul,li,h1,h2,h3,h4,h5,p {\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\nbody{\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\nh1 {\r\n    text-align: center;\r\n    margin-top: 200px;\r\n}\r\n\r\n.app .false{\r\n    display: none;\r\n}", ""]);
 
 // exports
 
