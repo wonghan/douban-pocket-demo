@@ -5159,7 +5159,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(217);
+var content = __webpack_require__(216);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -22930,15 +22930,15 @@ var _indexlist = __webpack_require__(198);
 
 var _indexlist2 = _interopRequireDefault(_indexlist);
 
-var _indexNav = __webpack_require__(207);
+var _indexNav = __webpack_require__(206);
 
 var _indexNav2 = _interopRequireDefault(_indexNav);
 
-var _detailPage = __webpack_require__(210);
+var _detailPage = __webpack_require__(209);
 
 var _detailPage2 = _interopRequireDefault(_detailPage);
 
-__webpack_require__(221);
+__webpack_require__(220);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22966,7 +22966,7 @@ var App = function (_Component) {
       books: _books3.default.books,
       movies: _movies3.default.subjects,
       musics: _musics3.default.musics,
-      isShowNav: true
+      isLoad: false
     };
     return _this;
   }
@@ -23063,55 +23063,48 @@ var App = function (_Component) {
         case 'book':
           var _books = this.state.books;
           (0, _fetch.fetchBooks)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
+            _this5.setState({
+              books: _books,
+              pageCount: _this5.state.pageCount + 1,
+              isLoad: true
+            });
             data.books && data.books.forEach(function (item, index) {
               _books.push(item);
             });
-            _this5.setState({
-              books: _books,
-              pageCount: _this5.state.pageCount + 1
-            });
-          });
+          }).then(this.setState({
+            isLoad: false
+          }));
           break;
         case 'movie':
           var _movies = this.state.movies;
           (0, _fetch.fetchMovies)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
-            data.subjects && data.subjects.forEach(function (item, index) {
-              _movies.push(item);
-            });
             _this5.setState({
               movies: _movies,
-              pageCount: _this5.state.pageCount + 1
+              pageCount: _this5.state.pageCount + 1,
+              isLoad: true
             });
+            data.subjects && data.subjects.forEach(function (item, index) {
+              _movies.push(item);
+            }).then(_this5.setState({
+              isLoad: false
+            }));
           });
           break;
         case 'music':
           var _musics = this.state.musics;
           (0, _fetch.fetchMusics)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
-            data.musics && data.musics.forEach(function (item, index) {
-              _musics.push(item);
-            });
             _this5.setState({
               musics: _musics,
               pageCount: _this5.state.pageCount + 1
             });
-          });
-          // console.log(musics);
+            data.musics && data.musics.forEach(function (item, index) {
+              _musics.push(item);
+            });
+          }).then(this.setState({
+            isLoad: false
+          }));
           break;
       }
-    }
-  }, {
-    key: 'showNav',
-    value: function showNav() {
-      this.setState({
-        isShowNav: true
-      });
-    }
-  }, {
-    key: 'hideNav',
-    value: function hideNav() {
-      this.setState({
-        isShowNav: false
-      });
     }
   }, {
     key: 'render',
@@ -23124,9 +23117,9 @@ var App = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'index' + ' ' + !this.state.pageType },
-          _react2.default.createElement(_indexSearch2.default, { type: type, onClickSearch: this.onClickSearch.bind(this), showNav: this.showNav.bind(this), hideNav: this.hideNav.bind(this) }),
-          _react2.default.createElement(_indexlist2.default, { type: type, data: data, onSearch: this.state.onSearch, pageChange: this.pageChange.bind(this), refresh: this.refresh.bind(this), load: this.load.bind(this) }),
-          _react2.default.createElement(_indexNav2.default, { onClickNav: this.onClickNav.bind(this), type: this.state.type, isShowNav: this.state.isShowNav })
+          _react2.default.createElement(_indexSearch2.default, { type: type, onClickSearch: this.onClickSearch.bind(this) }),
+          _react2.default.createElement(_indexlist2.default, { type: type, data: data, onSearch: this.state.onSearch, pageChange: this.pageChange.bind(this), refresh: this.refresh.bind(this), load: this.load.bind(this), isLoad: this.state.isLoad }),
+          _react2.default.createElement(_indexNav2.default, { onClickNav: this.onClickNav.bind(this), type: this.state.type })
         ),
         this.state.pageType && _react2.default.createElement(_detailPage2.default, { datum: this.state.datum, type: this.state.type, pageChange: this.pageChange.bind(this) })
       );
@@ -24591,12 +24584,6 @@ var Search = function (_Component) {
         { className: 'search' },
         _react2.default.createElement('i', { className: 'iconfont icon-search' }),
         _react2.default.createElement('input', { className: 'search-input', placeholder: placeholderMaps[index],
-          onFocus: function onFocus() {
-            _this2.props.hideNav();
-          },
-          onBlur: function onBlur() {
-            _this2.props.showNav();
-          },
           ref: function ref(input) {
             return _this2.input = input;
           } }),
@@ -24656,7 +24643,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 8vh;\r\n    padding: 12px;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
+exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 8vh;\r\n    padding: 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
 
 // exports
 
@@ -24779,10 +24766,6 @@ var _indexListItem = __webpack_require__(201);
 
 var _indexListItem2 = _interopRequireDefault(_indexListItem);
 
-var _jroll = __webpack_require__(206);
-
-var _jroll2 = _interopRequireDefault(_jroll);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24790,8 +24773,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// JRoll的用法见：https://github.com/chjtx/JRoll
 
 var List = function (_Component) {
   _inherits(List, _Component);
@@ -24801,7 +24782,6 @@ var List = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
 
-    _this.jroll = null;
     _this.state = {
       type: _this.props.type
     };
@@ -24812,50 +24792,82 @@ var List = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var self = this;
-      var wrappers = this.props.ID || 'wrappers';
-      var upDiv = document.getElementById('upDiv');
-      var downDiv = document.getElementById('downDiv');
-      this.jroll = new _jroll2.default('#' + wrappers);
-      this.jroll.refresh();
-      this.jroll.on('scroll', function () {
-        if (this.y >= this.minScrollY + 50) {
-          upDiv.innerHTML = "释放刷新";
-        }
-      });
-      this.jroll.on('touchEnd', function () {
-        if (this.y >= this.minScrollY + 50) {
-          upDiv.innerHTML = "";
-          self.props.refresh();
-        }
-      });
-      this.jroll.on('scroll', function () {
-        if (this.y <= this.maxScrollY - 50) {
-          downDiv.innerHTML = "释放加载";
-        }
-      });
-      this.jroll.on('touchEnd', function () {
-        if (this.y <= this.maxScrollY - 50) {
-          downDiv.innerHTML = "";
+      var ul = document.querySelector('.list'); // 获取ul列表
+      var div = document.getElementById('wrappers'); // 获取包裹ul列表的div(css:  overflow:scroll;)
+      var upText = document.getElementById('upDiv');
+      var start = void 0; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
+      var refresh = false;
+
+      /**
+       * 上拉加载
+       */
+      div.addEventListener('scroll', function () {
+        console.log(div.scrollHeight - div.scrollTop);
+        if (div.scrollHeight - div.scrollTop < 1000 && self.props.isLoad === false) {
+          console.log(111);
           self.props.load();
         }
-      });
+      }, false);
+      /**
+       * 下拉刷新
+       */
+      div.addEventListener('touchstart', function (event) {
+        var touch = event.touches[0];
+        start = touch.pageY; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
+      }, false);
+      div.addEventListener('touchmove', function (event) {
+        // 下拉刷新
+        var touch = event.touches[0];
+        if (div.scrollTop <= 0) {
+          // 如果ul列表到顶部，修改ul列表的偏移,显示“下拉刷新”，并准备触发下拉刷新功能，可自定义
+          ul.style.top = ul.offsetTop + (touch.pageY - start) / 5 + 'px'; // ul.style.top = ul.offsetTop + 'px'
+          start = touch.pageY;
+          // 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新
+          if (ul.offsetTop >= 60) {
+            upText.innerHTML = "释放刷新";
+            refresh = true;
+          }
+        }
+      }, false);
+
+      div.addEventListener('touchend', function (event) {
+        // 若'touchend'时，ul偏移,用setInterval循环恢复ul的偏移量
+        if (ul.offsetTop >= 0) {
+          var time = setInterval(function () {
+            ul.style.top = ul.offsetTop - 3 + 'px';
+            // 若ul的偏移量恢复，clearInterval
+            if (ul.offsetTop <= 0) {
+              clearInterval(time);
+              upText.innerHTML = "下拉刷新";
+              // 若恢复时'refresh===true',刷新页面
+              if (refresh) {
+                refresh = false;
+                self.props.refresh();
+              }
+            }
+          }, 1);
+        }
+        if (ul.offsetTop < 0) {
+          ul.style.top = 0 + 'px';
+        }
+      }, false);
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      this.jroll.refresh();
+      var div = document.getElementById('wrappers');
       // 点击切换Tags时，自动回到list菜单第一列
       var oldType = this.state.type;
       var newType = this.props.type;
       if (oldType !== newType) {
-        this.jroll.scrollTo(0, 0, 0);
+        div.scrollTop = 0;
         this.setState({
           type: newType
         });
       }
       // 点击搜索时，自动回到list菜单第一列
       if (this.props.onSearch === true) {
-        this.jroll.scrollTo(0, 0, 0);
+        div.scrollTop = 0;
       }
     }
   }, {
@@ -24865,20 +24877,27 @@ var List = function (_Component) {
 
       var type = this.props.type;
       var data = this.props.data;
-      var clientHeight = document.documentElement.clientHeight;
       return (
         // 设置滚动容器，其中id,height(滚动容器的高度)必须设置
         _react2.default.createElement(
           'div',
-          { id: 'wrappers', style: { height: clientHeight * 0.85 } },
+          { id: 'wrappers', style: { height: window.innerHeight * 0.8 } },
           _react2.default.createElement(
             'ul',
             { className: 'list' },
-            _react2.default.createElement('div', { id: 'upDiv' }),
+            _react2.default.createElement(
+              'div',
+              { id: 'upDiv' },
+              '\u4E0B\u62C9\u5237\u65B0'
+            ),
             data.map(function (item, index) {
               return _react2.default.createElement(_indexListItem2.default, { item: item, key: index, type: type, pageChange: _this2.props.pageChange });
             }),
-            _react2.default.createElement('div', { id: 'downDiv' })
+            _react2.default.createElement(
+              'div',
+              { id: 'downDiv' },
+              '\u5230\u5E95\u4E86'
+            )
           )
         )
       );
@@ -24930,7 +24949,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".list{\r\n    padding: 0;\r\n    margin: 0 0 11vh;\r\n}\r\n#upDiv,#downDiv{\r\n    text-align: center;\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n}\r\n#upDiv{\r\n    top: -5vh;\r\n}\r\n", ""]);
+exports.push([module.i, "#wrappers{\r\n    overflow: scroll;\r\n    position: relative;\r\n}\r\n.list{\r\n    padding: 0;\r\n    margin: 0 0 7vh;\r\n    position: absolute;\r\n}\r\n#upDiv,#downDiv{\r\n    text-align: center;\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n}\r\n#upDiv{\r\n    top: -5vh;\r\n}\r\n", ""]);
 
 // exports
 
@@ -25018,7 +25037,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".item{\r\n    list-style: none;\r\n    display: flex;\r\n    border: 1px solid #dfdfdf;\r\n    margin: 10px;\r\n}\r\n.item-img{\r\n\twidth: 100px;\r\n    height: 140px;\r\n    margin: 10px;\r\n}\r\n.item-detail{\r\n    height: 140px;\r\n}\r\n.item-detail p{\r\n    overflow: auto;\r\n    white-space: nowrap;\r\n    width: 200px;\r\n    margin: 9px;\r\n    height: 20px;\r\n}\r\n.item-detail .tag{\r\n    color: #fff;\r\n    padding: 1px 2px;\r\n    margin: 0 2px;\r\n    font-size: 16px;\r\n    border-radius: 2px;\r\n}\r\n.item-detail .book-tag{\r\n    background: #f3b500;\r\n}\r\n.item-detail .movie-tag{\r\n    background: #ff4245;\r\n}\r\n.item-detail .music-tag{\r\n    background: #43a4ff;\r\n}", ""]);
+exports.push([module.i, ".item{\r\n    list-style: none;\r\n    display: flex;\r\n    border: 1px solid #dfdfdf;\r\n    margin: 10px;\r\n}\r\n.item-img{\r\n\twidth: 100px;\r\n    height: 140px;\r\n    margin: 10px;\r\n}\r\n.item-detail{\r\n    height: 140px;\r\n}\r\n.item-detail p{\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n    width: 200px;\r\n    margin: 9px;\r\n    height: 20px;\r\n}\r\n.item-detail .tag{\r\n    color: #fff;\r\n    padding: 1px 2px;\r\n    margin: 0 2px;\r\n    font-size: 16px;\r\n    border-radius: 2px;\r\n}\r\n.item-detail .book-tag{\r\n    background: #f3b500;\r\n}\r\n.item-detail .movie-tag{\r\n    background: #ff4245;\r\n}\r\n.item-detail .music-tag{\r\n    background: #43a4ff;\r\n}", ""]);
 
 // exports
 
@@ -25065,7 +25084,6 @@ var BookItem = function (_Component) {
       var _this2 = this;
 
       var datum = this.props.datum;
-      var windowWidth = this.props.windowWidth;
       return _react2.default.createElement(
         'li',
         { className: 'item', onClick: function onClick() {
@@ -25077,13 +25095,13 @@ var BookItem = function (_Component) {
           { className: 'item-detail' },
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u540D\u79F0\uFF1A',
             datum.title
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             datum.tags && datum.tags.map(function (item, index) {
               return _react2.default.createElement(
                 'span',
@@ -25094,19 +25112,19 @@ var BookItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u4F5C\u8005\uFF1A',
             datum.author
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u8BC4\u5206\uFF1A',
             datum.rating.average
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u65E5\u671F\uFF1A',
             datum.pubdate
           )
@@ -25162,7 +25180,6 @@ var MovieItem = function (_Component) {
       var _this2 = this;
 
       var datum = this.props.datum;
-      var windowWidth = this.props.windowWidth;
       return _react2.default.createElement(
         'li',
         { className: 'item', onClick: function onClick() {
@@ -25174,13 +25191,13 @@ var MovieItem = function (_Component) {
           { className: 'item-detail' },
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u540D\u79F0\uFF1A',
             datum.title
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             datum.genres && datum.genres.map(function (item, index) {
               return _react2.default.createElement(
                 'span',
@@ -25191,7 +25208,7 @@ var MovieItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u4F5C\u8005\uFF1A',
             datum.casts && datum.casts.map(function (item, index) {
               return _react2.default.createElement(
@@ -25204,7 +25221,7 @@ var MovieItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u8BC4\u5206\uFF1A',
             datum.rating.average
           )
@@ -25260,7 +25277,6 @@ var MusicItem = function (_Component) {
       var _this2 = this;
 
       var datum = this.props.datum;
-      var windowWidth = this.props.windowWidth;
       return _react2.default.createElement(
         'li',
         { className: 'item', onClick: function onClick() {
@@ -25272,13 +25288,13 @@ var MusicItem = function (_Component) {
           { className: 'item-detail' },
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u540D\u79F0\uFF1A',
             datum.title
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             datum.tags && datum.tags.map(function (item) {
               return _react2.default.createElement(
                 'span',
@@ -25289,7 +25305,7 @@ var MusicItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u4F5C\u8005\uFF1A',
             datum.author && datum.author.map(function (item, index) {
               return _react2.default.createElement(
@@ -25301,7 +25317,7 @@ var MusicItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            { style: { width: windowWidth } },
+            { style: { width: this.props.windowWidth } },
             '\u8BC4\u5206\uFF1A',
             datum.rating.average
           )
@@ -25319,1187 +25335,6 @@ exports.default = MusicItem;
 /* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_RESULT__;/*! JRoll v2.6.0 ~ (c) 2015-2017 Author:BarZu Git:https://github.com/chjtx/JRoll Website:http://www.chjtx.com/JRoll/ */
-/* global define, HTMLElement */
-(function (window, document, Math) {
-  'use strict'
-
-  var JRoll
-  var VERSION = '2.6.0'
-  var rAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (callback) {
-    setTimeout(callback, 17)
-  }
-  var sty = document.createElement('div').style
-  var jrollMap = {} // 保存所有JRoll对象
-  var ua = navigator.userAgent.toLowerCase()
-  var prefix = (function () {
-    var vendors = ['OT', 'msT', 'MozT', 'webkitT', 't']
-    var transform
-    var i = vendors.length
-
-    while (i--) {
-      transform = vendors[i] + 'ransform'
-      if (transform in sty) return vendors[i]
-    }
-  })()
-
-  // 实用工具
-  var utils = {
-    // 兼容
-    TSF: prefix + 'ransform',
-    TSD: prefix + 'ransitionDuration',
-    TFO: prefix + 'ransformOrigin',
-    isAndroid: /android/.test(ua),
-    isIOS: /iphone|ipad/.test(ua),
-    isMobile: /mobile|phone|android|pad/.test(ua),
-
-    // 判断浏览是否支持perspective属性，从而判断是否支持开启3D加速
-    translateZ: (function (pre) {
-      var f
-      if (pre) {
-        f = pre + 'Perspective' in sty
-      } else {
-        f = 'perspective' in sty
-      }
-      return f ? ' translateZ(0px)' : ''
-    })(prefix.substr(0, prefix.length - 1)),
-
-    // 计算相对偏移，a相对于b的偏移
-    computeTranslate: function (a, b) {
-      var x = 0
-      var y = 0
-      var s
-      while (a) {
-        s = window.getComputedStyle(a)[utils.TSF].replace(/matrix\(|\)/g, '').split(', ')
-        x += parseInt(s[4]) || 0
-        y += parseInt(s[5]) || 0
-        a = a.parentElement
-        if (a === b) {
-          a = null
-        }
-      }
-      return {
-        x: x,
-        y: y
-      }
-    },
-
-    // 计算相对位置，a相对于b的位置
-    computePosition: function (a, b) {
-      var left = 0
-      var top = 0
-      while (a) {
-        left += a.offsetLeft
-        top += a.offsetTop
-        a = a.offsetParent
-        if (a === b) {
-          a = null
-        }
-      }
-      return {
-        left: left,
-        top: top
-      }
-    },
-
-    /**
-     * 在指定时间内将指定元素从开始位置移到结束位置并执行回调方法
-     * el 必须是dom元素，必填
-     * x,y 结束位置，必填
-     * duration 过渡时长，单位ms，可选
-     * callback 回调方法，可选
-     * context 上下文，可选
-     */
-    moveTo: function (el, x, y, duration, callback, context) {
-      var startX = 0
-      var startY = 0
-      var endX
-      var endY
-      var zoom = 1
-      var stepX
-      var stepY
-      var d
-      var result
-      result = /translate\(([-\d.]+)px,\s+([-\d.]+)px\)\s+(?:translateZ\(0px\)\s+)?scale\(([\d.]+)\)/.exec(el.style[utils.TSF])
-      if (result) {
-        startX = Number(result[1])
-        startY = Number(result[2])
-        zoom = Number(result[3])
-      }
-      d = duration || 17
-      stepX = (x - startX) / (d / 17)
-      stepY = (y - startY) / (d / 17)
-      endX = startX
-      endY = startY
-
-      function moving () {
-        d = d - 17
-        if (d < 17) {
-          endX = x
-          endY = y
-        } else {
-          endX = parseInt(endX + stepX, 10)
-          endY = parseInt(endY + stepY, 10)
-        }
-        el.style[utils.TSF] = 'translate(' + endX + 'px, ' + endY + 'px)' + utils.translateZ + ' scale(' + zoom + ')'
-
-        // 执行用户注册的滑动事件
-        if (context) {
-          context.x = endX
-          context.y = endY
-          context._execEvent('scroll')
-          if (context.scrollBtnX) context._runScrollBarX()
-          if (context.scrollBtnY) context._runScrollBarY()
-        }
-
-        if (d > 0 && !(endX === x && endY === y)) {
-          rAF(moving)
-        } else if (typeof callback === 'function') {
-          callback()
-        }
-      }
-
-      moving()
-    },
-
-    /**
-     * 一层一层往上查找已实例化的jroll
-     * el 目标元素
-     * force 强制查找，忽略textarea
-     */
-    findScroller: function (el, force) {
-      var id
-      // 遇到document或带垂直滚动条的textarea终止查找
-      if (force || !(el.tagName === 'TEXTAREA' && el.scrollHeight > el.offsetHeight)) {
-        while (el !== document) {
-          id = el.getAttribute('jroll-id')
-          if (id) {
-            return jrollMap[id]
-          }
-          el = el.parentNode
-        }
-      }
-      return null
-    },
-    // 一层一层往上查找所有已实例化的jroll
-    findAllJRolls: function (el, force) {
-      var jrolls = []
-      var id
-      // 遇到document或带垂直滚动条的textarea终止查找
-      if (force || !(el.tagName === 'TEXTAREA' && (el.scrollHeight > el.clientHeight) && (el.scrollTop > 0 && el.scrollTop < el.scrollHeight - el.clientHeight))) {
-        while (el !== document) {
-          id = el.getAttribute('jroll-id')
-          if (id) {
-            jrolls.push(jrollMap[id])
-          }
-          el = el.parentNode
-        }
-      }
-      return jrolls
-    }
-  }
-
-  function _touchstart (e) {
-    var jrolls = utils.findAllJRolls(e.target)
-    var l = jrolls.length
-
-    // 非缩放且第二个手指按屏中止往后执行
-    if (JRoll.jrollActive && !JRoll.jrollActive.options.zoom && e.touches && e.touches.length > 1) {
-      return
-    }
-    if (l) {
-      while (l--) {
-        if (jrolls[l].moving) {
-          e.preventDefault() // 防止按停滑动时误触a链接
-          jrolls[l]._endAction() // 结束并终止惯性
-        }
-      }
-
-      JRoll.jrollActive = jrolls[0]
-      JRoll.jrollActive._start(e)
-    } else if (JRoll.jrollActive) {
-      JRoll.jrollActive._end(e)
-    }
-  }
-
-  function _touchmove (e) {
-    if (JRoll.jrollActive) {
-      var activeElement = document.activeElement
-      if (JRoll.jrollActive.options.preventDefault) {
-        e.preventDefault()
-      }
-      if (utils.isMobile && JRoll.jrollActive.options.autoBlur && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-        activeElement.blur()
-      }
-      JRoll.jrollActive._move(e)
-    }
-  }
-
-  function _touchend (e) {
-    if (JRoll.jrollActive) {
-      JRoll.jrollActive._end(e)
-    }
-  }
-
-  function _resize () {
-    setTimeout(function () {
-      for (var i in jrollMap) {
-        jrollMap[i].refresh().scrollTo(jrollMap[i].x, jrollMap[i].y, 200)
-      }
-    }, 600)
-  }
-
-  function _wheel (e) {
-    var jroll = utils.findScroller(e.target)
-    if (jroll) {
-      jroll._wheel(e)
-    }
-  }
-
-  // 检测是否支持passive选项
-  var supportsPassiveOption = false
-  try {
-    var opts = Object.defineProperty({}, 'passive', {
-      get: function () {
-        supportsPassiveOption = true
-      }
-    })
-    window.addEventListener('test', null, opts)
-  } catch (e) {}
-
-  function addEvent (type, method) {
-    document.addEventListener(type, method, supportsPassiveOption ? { passive: false } : false)
-  }
-
-  // 添加监听事件
-  addEvent(utils.isMobile ? 'touchstart' : 'mousedown', _touchstart)
-  addEvent(utils.isMobile ? 'touchmove' : 'mousemove', _touchmove)
-  addEvent(utils.isMobile ? 'touchend' : 'mouseup', _touchend)
-  if (utils.isMobile) {
-    addEvent('touchcancel', _touchend)
-  } else {
-    addEvent(/firefox/.test(ua) ? 'DOMMouseScroll' : 'mousewheel', _wheel)
-  }
-  window.addEventListener('resize', _resize)
-  window.addEventListener('orientationchange', _resize)
-
-  JRoll = function (el, options) {
-    var me = this
-
-    me.wrapper = typeof el === 'string' ? document.querySelector(el) : el
-    me.scroller = options && options.scroller ? (typeof options.scroller === 'string' ? document.querySelector(options.scroller) : options.scroller) : me.wrapper.children[0]
-
-    // 防止重复多次new JRoll
-    if (me.scroller.jroll) {
-      me.scroller.jroll.refresh()
-      return me.scroller.jroll
-    } else {
-      me.scroller.jroll = me
-    }
-
-    this._init(el, options)
-  }
-
-  JRoll.version = VERSION
-
-  JRoll.utils = utils
-
-  JRoll.jrollMap = jrollMap
-
-  JRoll.prototype = {
-    // 初始化
-    _init: function (el, options) {
-      var me = this
-
-      // 计算wrapper相对document的位置
-      me.wrapperOffset = utils.computePosition(me.wrapper, document.body)
-
-      // 创建ID
-      me.id = (options && options.id) || me.scroller.getAttribute('jroll-id') || 'jroll_' + Math.random().toString().substr(2, 8)
-
-      // 保存jroll对象
-      me.scroller.setAttribute('jroll-id', me.id)
-      jrollMap[me.id] = me
-
-      // 默认选项
-      me.options = {
-        scrollX: false,
-        scrollY: true,
-        scrollFree: false, // 自由滑动
-        minX: null, // 向左滑动的边界值，默认为0
-        maxX: null, // 向右滑动的边界值，默认为scroller的宽*-1
-        minY: null, // 向下滑动的边界值，默认为0
-        maxY: null, // 向上滑动的边界值，默认为scroller的高*-1
-        zoom: false, // 使能缩放
-        zoomMin: 1, // 最小缩放倍数
-        zoomMax: 4, // 最大缩放倍数
-        zoomDuration: 400, // 缩放结束后回到限定位置的过渡时间
-        bounce: true, // 回弹
-        scrollBarX: false, // 开启x滚动条
-        scrollBarY: false, // 开启y滚动条
-        scrollBarFade: false, // 滚动条使用渐隐模式
-        preventDefault: true, // 禁止touchmove默认事件
-        momentum: true, // 滑动结束平滑过渡
-        autoStyle: true, // 自动为wrapper和scroller添加样式
-        autoBlur: true,  // 在滑动时自动将input/textarea失焦
-        edgeRelease: true // 边缘释放，滑动到上下边界自动结束，解决手指滑出屏幕没触发touchEnd事件的问题
-      }
-
-      for (var i in options) {
-        if (i !== 'scroller') {
-          me.options[i] = options[i]
-        }
-      }
-
-      if (me.options.autoStyle) {
-        // 将wrapper设为relative
-        if (window.getComputedStyle(me.wrapper).position === 'static') {
-          me.wrapper.style.position = 'relative'
-          me.wrapper.style.top = '0'
-          me.wrapper.style.left = '0'
-        }
-        me.wrapper.style.overflow = 'hidden'
-        me.scroller.style.minHeight = '100%'
-      }
-
-      if (me.options.zoom) {
-        // 该属性是为了解决缩放时与浏览器手势冲突造成缩放卡顿的问题，尤其是微信端
-        // 设置该属性会导致 preventDefault 选项失效
-        me.scroller.style.touchAction = 'none'
-      }
-
-      me.x = 0
-      me.y = 0
-
-      /**
-       * 当前状态，可取值：
-       * null
-       * preScroll(准备滑动)
-       * preZoom(准备缩放)
-       * scrollX(横向)
-       * scrollY(竖向)
-       * scrollFree(各个方向)
-       */
-      me.s = null
-      me.scrollBarX = null // x滚动条
-      me.scrollBarY = null // y滚动条
-
-      me._s = {
-        startX: 0,
-        startY: 0,
-        lastX: 0,
-        lastY: 0,
-        endX: 0,
-        endY: 0
-      }
-
-      me._z = {
-        spacing: 0, // 两指间间距
-        scale: 1,
-        startScale: 1
-      }
-
-      me._event = {
-        'scrollStart': [],
-        'scroll': [],
-        'scrollEnd': [],
-        'zoomStart': [],
-        'zoom': [],
-        'zoomEnd': [],
-        'refresh': [],
-        'touchEnd': []
-      }
-
-      me.refresh(true)
-    },
-
-    // 开启
-    enable: function () {
-      var me = this
-      me.scroller.setAttribute('jroll-id', me.id)
-      return me
-    },
-
-    // 关闭
-    disable: function () {
-      var me = this
-      me.scroller.removeAttribute('jroll-id')
-      return me
-    },
-
-    // 销毁
-    destroy: function () {
-      var me = this
-      delete jrollMap[me.id]
-      delete me.scroller.jroll
-      if (me.scrollBarX) {
-        me.wrapper.removeChild(me.scrollBarX)
-      }
-      if (me.scrollBarY) {
-        me.wrapper.removeChild(me.scrollBarY)
-      }
-      me.disable()
-      me.scroller.style[utils.tSF] = ''
-      me.scroller.style[utils.tSD] = ''
-      me.prototype = null
-      for (var i in me) {
-        if (me.hasOwnProperty(i)) {
-          delete me[i]
-        }
-      }
-    },
-
-    // 替换对象
-    call: function (target, e) {
-      var me = this
-      me.scrollTo(me.x, me.y)
-      JRoll.jrollActive = target
-      if (e) target._start(e)
-      return target
-    },
-
-    // 刷新JRoll的宽高
-    refresh: function (notRefreshEvent) {
-      var me = this
-      var wrapperStyle = window.getComputedStyle(me.wrapper)
-      var scrollerStyle = window.getComputedStyle(me.scroller)
-      var paddingX
-      var paddingY
-      var marginX
-      var marginY
-      var temp
-      var size
-
-      me.wrapperWidth = me.wrapper.clientWidth
-      me.wrapperHeight = me.wrapper.clientHeight
-
-      me.scrollerWidth = Math.round(me.scroller.offsetWidth * me._z.scale)
-      me.scrollerHeight = Math.round(me.scroller.offsetHeight * me._z.scale)
-
-      // 解决wrapper的padding和scroller的margin造成maxWidth/maxHeight计算错误的问题
-      paddingX = parseInt(wrapperStyle['padding-left']) + parseInt(wrapperStyle['padding-right'])
-      paddingY = parseInt(wrapperStyle['padding-top']) + parseInt(wrapperStyle['padding-bottom'])
-      marginX = parseInt(scrollerStyle['margin-left']) + parseInt(scrollerStyle['margin-right'])
-      marginY = parseInt(scrollerStyle['margin-top']) + parseInt(scrollerStyle['margin-bottom'])
-
-      // 最大/最小范围
-      me.minScrollX = me.options.minX === null ? 0 : me.options.minX
-      me.maxScrollX = me.options.maxX === null ? me.wrapperWidth - me.scrollerWidth - paddingX - marginX : me.options.maxX
-      me.minScrollY = me.options.minY === null ? 0 : me.options.minY
-      me.maxScrollY = me.options.maxY === null ? me.wrapperHeight - me.scrollerHeight - paddingY - marginY : me.options.maxY
-
-      if (me.minScrollX < 0) {
-        me.minScrollX = 0
-      }
-      if (me.minScrollY < 0) {
-        me.minScrollY = 0
-      }
-      if (me.maxScrollX > 0) {
-        me.maxScrollX = 0
-      }
-      if (me.maxScrollY > 0) {
-        me.maxScrollY = 0
-      }
-
-      me._s.endX = me.x
-      me._s.endY = me.y
-
-      // x滚动条
-      if (me.options.scrollBarX) {
-        if (!me.scrollBarX) {
-          temp = me._createScrollBar('jroll-xbar', 'jroll-xbtn', false)
-          me.scrollBarX = temp[0]
-          me.scrollBtnX = temp[1]
-        }
-        me.scrollBarScaleX = me.wrapper.clientWidth / me.scrollerWidth
-        size = Math.round(me.scrollBarX.clientWidth * me.scrollBarScaleX)
-        me.scrollBtnX.style.width = (size > 8 ? size : 8) + 'px'
-        me._runScrollBarX()
-      } else if (me.scrollBarX) {
-        me.wrapper.removeChild(me.scrollBarX)
-        me.scrollBarX = null
-      }
-      // y滚动条
-      if (me.options.scrollBarY) {
-        if (!me.scrollBarY) {
-          temp = me._createScrollBar('jroll-ybar', 'jroll-ybtn', true)
-          me.scrollBarY = temp[0]
-          me.scrollBtnY = temp[1]
-        }
-        me.scrollBarScaleY = me.wrapper.clientHeight / me.scrollerHeight
-        size = Math.round(me.scrollBarY.clientHeight * me.scrollBarScaleY)
-        me.scrollBtnY.style.height = (size > 8 ? size : 8) + 'px'
-        me._runScrollBarY()
-      } else if (me.scrollBarY) {
-        me.wrapper.removeChild(me.scrollBarY)
-        me.scrollBarY = null
-      }
-
-      if (!notRefreshEvent) {
-        me._execEvent('refresh')
-      }
-
-      return me
-    },
-
-    scale: function (multiple) {
-      var me = this
-      var z = parseFloat(multiple)
-      if (!isNaN(z)) {
-        me.scroller.style[utils.TFO] = '0 0'
-        me._z.scale = z
-        me.refresh()._scrollTo(me.x, me.y)
-        me.scrollTo(me.x, me.y, 400)
-      }
-      return me
-    },
-
-    _wheel: function (e) {
-      var me = this
-      var y = e.wheelDelta || -(e.detail / 3) * 120 // 兼容火狐
-      if (me.options.scrollY || me.options.scrollFree) {
-        me.scrollTo(me.x, me._compute(me.y + y, me.minScrollY, me.maxScrollY))
-      }
-    },
-
-    // 滑动滚动条
-    _runScrollBarX: function () {
-      var me = this
-      var x = Math.round(-1 * me.x * me.scrollBarScaleX)
-
-      me._scrollTo.call({
-        scroller: me.scrollBtnX,
-        _z: {
-          scale: 1
-        }
-      }, x, 0)
-    },
-    _runScrollBarY: function () {
-      var me = this
-      var y = Math.round(-1 * me.y * me.scrollBarScaleY)
-
-      me._scrollTo.call({
-        scroller: me.scrollBtnY,
-        _z: {
-          scale: 1
-        }
-      }, 0, y)
-    },
-
-    // 创建滚动条
-    _createScrollBar: function (a, b, isY) {
-      var me = this
-      var bar
-      var btn
-
-      bar = document.createElement('div')
-      btn = document.createElement('div')
-      bar.className = a
-      btn.className = b
-
-      if (this.options.scrollBarX === true || this.options.scrollBarY === true) {
-        if (isY) {
-          bar.style.cssText = 'position:absolute;top:2px;right:2px;bottom:2px;width:6px;overflow:hidden;border-radius:2px;-webkit-transform: scaleX(.5);transform: scaleX(.5);'
-          btn.style.cssText = 'background:rgba(0,0,0,.4);position:absolute;top:0;left:0;right:0;border-radius:2px;'
-        } else {
-          bar.style.cssText = 'position:absolute;left:2px;bottom:2px;right:2px;height:6px;overflow:hidden;border-radius:2px;-webkit-transform: scaleY(.5);transform: scaleY(.5);'
-          btn.style.cssText = 'background:rgba(0,0,0,.4);height:100%;position:absolute;left:0;top:0;bottom:0;border-radius:2px;'
-        }
-      }
-
-      if (me.options.scrollBarFade) {
-        bar.style.opacity = 0
-      }
-
-      bar.appendChild(btn)
-      me.wrapper.appendChild(bar)
-
-      return [bar, btn]
-    },
-
-    // 滚动条渐隐
-    _fade: function (bar, time) {
-      var me = this
-      if (me.fading && time > 0) {
-        time = time - 25
-        if (time % 100 === 0) bar.style.opacity = time / 1000
-      } else {
-        return
-      }
-      rAF(me._fade.bind(me, bar, time))
-    },
-
-    on: function (event, callback) {
-      var me = this
-      switch (event) {
-        case 'scrollStart':
-          me._event.scrollStart.push(callback)
-          break
-        case 'scroll':
-          me._event.scroll.push(callback)
-          break
-        case 'scrollEnd':
-          me._event.scrollEnd.push(callback)
-          break
-        case 'zoomStart':
-          me._event.zoomStart.push(callback)
-          break
-        case 'zoom':
-          me._event.zoom.push(callback)
-          break
-        case 'zoomEnd':
-          me._event.zoomEnd.push(callback)
-          break
-        case 'refresh':
-          me._event.refresh.push(callback)
-          break
-        case 'touchEnd':
-          me._event.touchEnd.push(callback)
-          break
-      }
-      return me
-    },
-
-    _execEvent: function (event, e) {
-      var me = this
-      var i = me._event[event].length - 1
-      for (; i >= 0; i--) {
-        me._event[event][i].call(me, e)
-      }
-    },
-
-    // 计算x,y的值
-    _compute: function (val, min, max) {
-      var me = this
-      if (val > min) {
-        if (me.options.bounce && (val > (min + 10))) {
-          return Math.round(min + ((val - min) / 4))
-        } else {
-          return min
-        }
-      }
-
-      if (val < max) {
-        if (me.options.bounce && (val < (max - 10))) {
-          return Math.round(max + ((val - max) / 4))
-        } else {
-          return max
-        }
-      }
-
-      return val
-    },
-
-    _scrollTo: function (x, y) {
-      this.scroller.style[utils.TSF] = 'translate(' + x + 'px, ' + y + 'px)' + utils.translateZ + ' scale(' + this._z.scale + ')'
-    },
-
-    /**
-     * 供用户调用的scrollTo方法
-     * x x坐标
-     * y y坐标
-     * timing 滑动时长，使用css3的transition-duration进行过渡
-     * allow  是否允许超出边界，默认为undefined即不允许超出边界
-     * system 为true时即是本程序自己调用，默认为undefined即非本程序调用
-     */
-    scrollTo: function (x, y, timing, allow, callback, system, t) {
-      var me = this
-      if (!allow) {
-        // x
-        if (x >= me.minScrollX) {
-          me.x = me.minScrollX
-
-          // 滑到最大值时手指继续滑，重置开始、结束位置，优化体验
-          if (t) {
-            me._s.startX = t[0].pageX
-            me._s.endX = me.minScrollX
-          }
-        } else if (x <= me.maxScrollX) {
-          me.x = me.maxScrollX
-          if (t) {
-            me._s.startX = t[0].pageX
-            me._s.endX = me.maxScrollX
-          }
-        } else {
-          me.x = x
-        }
-
-        // y
-        if (y >= me.minScrollY) {
-          me.y = me.minScrollY
-          if (t) {
-            me._s.startY = t[0].pageY
-            me._s.endY = me.minScrollY
-          }
-        } else if (y <= me.maxScrollY) {
-          me.y = me.maxScrollY
-          if (t) {
-            me._s.startY = t[0].pageY
-            me._s.endY = me.maxScrollY
-          }
-        } else {
-          me.y = y
-        }
-      } else {
-        me.x = x
-        me.y = y
-      }
-      if (!system) {
-        me._s.endX = me.x
-        me._s.endY = me.y
-      }
-      if (timing) {
-        utils.moveTo(me.scroller, me.x, me.y, timing, callback, system ? me : null)
-      } else {
-        me._scrollTo(me.x, me.y)
-        if (system) {
-          me._execEvent('scroll', t && t[0])
-        }
-        if (typeof callback === 'function') {
-          callback()
-        }
-      }
-
-      if (me.scrollBtnX) me._runScrollBarX()
-      if (me.scrollBtnY) me._runScrollBarY()
-
-      return me
-    },
-
-    scrollToElement: function (selector, timing, allow, callback) {
-      var me = this
-      var el = typeof selector === 'string' ? me.scroller.querySelector(selector) : selector
-      if (el instanceof HTMLElement) {
-        var p = utils.computePosition(el, me.scroller)
-        var t = utils.computeTranslate(el, me.scroller)
-        var x = -(p.left + t.x)
-        var y = -(p.top + t.y)
-        return me.scrollTo(x, y, timing, allow, callback)
-      }
-    },
-
-    _endAction: function () {
-      var me = this
-      me._s.endX = me.x
-      me._s.endY = me.y
-      me.moving = false
-
-      if (me.options.scrollBarFade && !me.fading) {
-        me.fading = true // 标记渐隐滚动条
-        if (me.scrollBarX) me._fade(me.scrollBarX, 2000)
-        if (me.scrollBarY) me._fade(me.scrollBarY, 2000)
-      }
-      me._execEvent('scrollEnd')
-    },
-
-    _stepBounce: function (time, count) {
-      var me = this
-      var now = Date.now()
-      var t = now - time
-      var s = 0
-
-      if (t > 0) {
-        me.speed = me.speed - t * 0.008
-        s = Math.round(me.speed * t * count * 0.005)
-        if (me.speed <= 0 || s <= 0 || isNaN(s)) {
-          me.bouncing = false
-          me.scrollTo(me.x, me.y, 200, false, function () {
-            me._endAction()
-          }, true)
-          return
-        }
-
-        if (me.s === 'scrollY' || me.s === 'scrollFree') {
-          me.y = me.y + s * me.directionY
-        }
-        if (me.s === 'scrollX' || me.s === 'scrollFree') {
-          me.x = me.x + s * me.directionX
-        }
-        me.scrollTo(me.x, me.y, 0, true, null, true)
-        rAF(me._stepBounce.bind(me, now, count - 1))
-      }
-    },
-
-    _x: function (p) {
-      var me = this
-      var n = me.directionX * p
-      if (!isNaN(n)) {
-        me.x = me.x + n
-        // 达到边界终止惯性，执行回弹
-        if (me.x >= me.minScrollX || me.x <= me.maxScrollX) {
-          if (me.options.bounce) {
-            me.bouncing = true // 标记回弹
-          } else {
-            me.moving = false
-          }
-        }
-      }
-    },
-
-    _y: function (p) {
-      var me = this
-      var n = me.directionY * p
-      if (!isNaN(n)) {
-        me.y = me.y + n
-        // 达到边界终止惯性，执行回弹
-        if (me.y >= me.minScrollY || me.y <= me.maxScrollY) {
-          if (me.options.bounce) {
-            me.bouncing = true // 标记回弹
-          } else {
-            me.moving = false
-          }
-        }
-      }
-    },
-
-    _xy: function (p) {
-      var me = this
-      var x = Math.round(me.cosX * p)
-      var y = Math.round(me.cosY * p)
-      if (!isNaN(x) && !isNaN(y)) {
-        me.x = me.x + x
-        me.y = me.y + y
-        // 达到边界终止惯性，执行回弹
-        if ((me.x >= me.minScrollX || me.x <= me.maxScrollX) && (me.y >= me.minScrollY || me.y <= me.maxScrollY)) {
-          me.moving = false
-        }
-      }
-    },
-
-    _step: function (time) {
-      var me = this
-      var now = Date.now()
-      var t = now - time
-      var s = 0
-
-      // 惯性滑动结束，执行回弹
-      if (me.bouncing) {
-        rAF(me._stepBounce.bind(me, time, 20))
-        return
-      }
-
-      // 终止
-      if (!me.moving) {
-        me._endAction()
-        return
-      }
-
-      // 防止t为0滑动终止造成卡顿现象
-      if (t > 0) {
-        me.speed = me.speed - t * (me.speed > 1.2 ? 0.001 : (me.speed > 0.6 ? 0.0008 : 0.0006))
-        s = Math.round(me.speed * t)
-        if (me.speed <= 0 || s <= 0) {
-          me._endAction()
-          return
-        }
-        time = now
-
-        // _do是可变方法，可为_x,_y或_xy，在判断方向时判断为何值，避免在次处进行过多的判断操作
-        me._do(s)
-        me.scrollTo(me.x, me.y, 0, me.options.bounce && !me.options.scrollFree, null, true)
-      }
-
-      rAF(me._step.bind(me, time))
-    },
-
-    _doScroll: function (d, e) {
-      var me = this
-      var pageY
-      me.distance = d
-      if (me.options.bounce) {
-        me.x = me._compute(me.x, me.minScrollX, me.maxScrollX)
-        me.y = me._compute(me.y, me.minScrollY, me.maxScrollY)
-      }
-      me.scrollTo(me.x, me.y, 0, me.options.bounce, null, true, (e.touches || [e]))
-
-      // 解决垂直滑动超出屏幕边界时捕捉不到touchend事件无法执行结束方法的问题
-      if (e && e.touches && me.options.edgeRelease) {
-        pageY = e.touches[0].pageY
-        if (pageY <= 10 || pageY >= window.innerHeight - 10) {
-          me._end(e)
-        }
-      }
-    },
-
-    // 判断是滑动JRoll还是滑动Textarea（垂直方向）
-    _yTextarea: function (e) {
-      var me = this
-      var target = e.target
-      if (target.tagName === 'TEXTAREA' && target.scrollHeight > target.clientHeight &&
-
-        // textarea滑动条在顶部，向上滑动时将滑动权交给textarea
-        ((target.scrollTop === 0 && me.directionY === -1) ||
-
-        // textarea滑动条在底部，向下滑动时将滑动权交给textarea
-        (target.scrollTop === target.scrollHeight - target.clientHeight && me.directionY === 1))) {
-        me._end(e, true)
-        return false
-      }
-      return true
-    },
-
-    _start: function (e) {
-      var me = this
-      var t = e.touches || [e]
-
-      // 判断缩放
-      if (me.options.zoom && t.length > 1) {
-        me.s = 'preZoom'
-        me.scroller.style[utils.TFO] = '0 0'
-
-        var c1 = Math.abs(t[0].pageX - t[1].pageX)
-        var c2 = Math.abs(t[0].pageY - t[1].pageY)
-
-        me._z.spacing = Math.sqrt(c1 * c1 + c2 * c2)
-        me._z.startScale = me._z.scale
-
-        me.originX = (t[0].pageX - t[1].pageX) / 2 + t[1].pageX -
-          (utils.computePosition(me.scroller, document.body).left +
-          utils.computeTranslate(me.scroller, document.body).x)
-
-        me.originY = (t[0].pageY - t[1].pageY) / 2 + t[1].pageY -
-          (utils.computePosition(me.scroller, document.body).top +
-          utils.computeTranslate(me.scroller, document.body).y)
-
-        me._execEvent('zoomStart', e)
-        return
-      }
-
-      if (me.options.scrollBarFade) {
-        me.fading = false // 终止滑动条渐隐
-        if (me.scrollBarX) me.scrollBarX.style.opacity = 1
-        if (me.scrollBarY) me.scrollBarY.style.opacity = 1
-      }
-
-      // 任意方向滑动
-      if (me.options.scrollFree) {
-        me._do = me._xy
-        me.s = 'scrollFree'
-
-      // 允许xy两个方向滑动
-      } else if (me.options.scrollX && me.options.scrollY) {
-        me.s = 'preScroll'
-
-      // 只允许y
-      } else if (!me.options.scrollX && me.options.scrollY) {
-        me._do = me._y
-        me.s = 'scrollY'
-
-      // 只允许x
-      } else if (me.options.scrollX && !me.options.scrollY) {
-        me._do = me._x
-        me.s = 'scrollX'
-      } else {
-        me.s = null
-        return
-      }
-
-      me.distance = 0
-      me.lastMoveTime = me.startTime = Date.now()
-      me._s.lastX = me.startPositionX = me._s.startX = t[0].pageX
-      me._s.lastY = me.startPositionY = me._s.startY = t[0].pageY
-
-      me._execEvent('scrollStart', e)
-    },
-
-    _move: function (e) {
-      var me = this
-      var t = e.touches || [e]
-      var now
-      var x
-      var y
-      var dx
-      var dy
-      var px
-      var py
-      var sqrtXY
-      var directionX = 1
-      var directionY = 1
-
-      // 一个很奇怪的问题，在小米5默认浏览器上同时对x,y进行赋值流畅度会降低
-      // 因此采取选择性赋值以保证单向运行较好的滑动体验
-      if (me.s === 'preScroll' || me.s === 'scrollX' || me.s === 'scrollFree') {
-        x = t[0].pageX
-      }
-      if (me.s === 'preScroll' || me.s === 'scrollY' || me.s === 'scrollFree') {
-        y = t[0].pageY
-      }
-
-      dx = x - me._s.lastX
-      dy = y - me._s.lastY
-
-      me._s.lastX = x
-      me._s.lastY = y
-
-      directionX = dx >= 0 ? 1 : -1 // 手指滑动方向，1(向右) | -1(向左)
-      directionY = dy >= 0 ? 1 : -1 // 手指滑动方向，1(向下) | -1(向上)
-
-      now = Date.now()
-
-      if (now - me.lastMoveTime > 200 || me.directionX !== directionX || me.directionY !== directionY) {
-        me.startTime = now
-        me.startPositionX = x
-        me.startPositionY = y
-        me.directionX = directionX
-        me.directionY = directionY
-      }
-
-      me.lastMoveTime = now
-
-      px = x - me.startPositionX
-      py = y - me.startPositionY
-
-      // 判断滑动方向
-      if (me.s === 'preScroll') {
-        // 判断为y方向，y方向滑动较常使用，因此优先判断
-        if (Math.abs(y - me._s.startY) >= Math.abs(x - me._s.startX)) {
-          me._do = me._y
-          me.s = 'scrollY'
-          return
-        }
-
-        // 判断为x方向
-        if (Math.abs(y - me._s.startY) < Math.abs(x - me._s.startX)) {
-          me._do = me._x
-          me.s = 'scrollX'
-          return
-        }
-      }
-
-      // y方向滑动
-      if (me.s === 'scrollY') {
-        me.y = y - me._s.startY + me._s.endY
-        if (me._yTextarea(e)) {
-          me._doScroll(py, e)
-        }
-        return
-      }
-
-      // x方向滑动
-      if (me.s === 'scrollX') {
-        me.x = x - me._s.startX + me._s.endX
-        me._doScroll(px, e)
-        return
-      }
-
-      // 任意方向滑动
-      if (me.s === 'scrollFree') {
-        me.x = x - me._s.startX + me._s.endX
-        me.y = y - me._s.startY + me._s.endY
-        sqrtXY = Math.sqrt(px * px + py * py)
-        me.cosX = px / sqrtXY
-        me.cosY = py / sqrtXY
-        me._doScroll(Math.sqrt(px * px + py * py), e)
-        return
-      }
-
-      // 缩放
-      if (me.s === 'preZoom') {
-        var c1 = Math.abs(t[0].pageX - t[1].pageX)
-        var c2 = Math.abs(t[0].pageY - t[1].pageY)
-        var spacing = Math.sqrt(c1 * c1 + c2 * c2)
-        var scale = spacing / me._z.spacing * me._z.startScale
-        var lastScale
-
-        if (scale < me.options.zoomMin) {
-          scale = me.options.zoomMin
-        } else if (scale > me.options.zoomMax) {
-          scale = me.options.zoomMax
-        }
-
-        lastScale = scale / me._z.startScale
-
-        me.x = Math.round(me.originX - me.originX * lastScale + me._s.endX)
-        me.y = Math.round(me.originY - me.originY * lastScale + me._s.endY)
-        me._z.scale = scale
-
-        me._scrollTo(me.x, me.y)
-        me._execEvent('zoom', e)
-
-        return
-      }
-    },
-
-    _end: function (e, manual) {
-      var me = this
-      var ex1
-      var ex2
-      var now = Date.now()
-      var s1 = me.s === 'scrollY'
-      var s2 = me.s === 'scrollX'
-      var s3 = me.s === 'scrollFree'
-
-      // 滑动结束
-      if (s1 || s2 || s3) {
-        // 禁止第二个手指滑动，只有一个手指时touchend事件的touches.length为0
-        // manual参数用于判断是否手动执行_end方法，用于处理带滚动条的texearea
-        if (e.touches && e.touches.length && !manual) {
-          return
-        }
-
-        me._execEvent('touchEnd')
-        JRoll.jrollActive = null
-        me.duration = now - me.startTime
-
-        ex1 = me.y > me.minScrollY || me.y < me.maxScrollY
-        ex2 = me.x > me.minScrollX || me.x < me.maxScrollX
-
-        // 超出边界回弹
-        if ((s1 && ex1) || (s2 && ex2) || (s3 && (ex1 || ex2))) {
-          me.scrollTo(me.x, me.y, 300)._endAction()
-
-        // 惯性滑动
-        } else if (me.options.momentum && me.duration < 200 && me.distance) {
-          me.speed = Math.abs(me.distance / me.duration)
-          me.speed = me.speed > 2 ? 2 : me.speed
-          me.moving = true
-          rAF(me._step.bind(me, now))
-        } else {
-          me._endAction()
-        }
-        return
-      }
-
-      // 缩放结束
-      if (me.s === 'preZoom') {
-        me._execEvent('touchEnd')
-        JRoll.jrollActive = null
-
-        if (me._z.scale > me.options.zoomMax) {
-          me._z.scale = me.options.zoomMax
-        } else if (me._z.scale < me.options.zoomMin) {
-          me._z.scale = me.options.zoomMin
-        }
-
-        me.refresh()
-
-        me.scrollTo(me.x, me.y, me.options.zoomDuration)
-
-        me._execEvent('zoomEnd')
-
-        return
-      }
-    }
-  }
-
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = JRoll
-  }
-  if (true) {
-    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-      return JRoll
-    }.call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
-  }
-
-  window.JRoll = JRoll
-})(window, document, Math)
-
-
-/***/ }),
-/* 207 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -26513,7 +25348,7 @@ var _react = __webpack_require__(7);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(208);
+__webpack_require__(207);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26540,7 +25375,7 @@ var Nav = function (_Component) {
       var type = this.props.type;
       return _react2.default.createElement(
         'div',
-        { className: this.props.isShowNav ? 'nav' : 'nav hide' },
+        { className: 'nav' },
         _react2.default.createElement(
           'div',
           { className: 'nav-item ' + (type === 'book' ? 'nav-item-selected' : ''), onClick: function onClick() {
@@ -26587,13 +25422,13 @@ var Nav = function (_Component) {
 exports.default = Nav;
 
 /***/ }),
-/* 208 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(209);
+var content = __webpack_require__(208);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -26618,7 +25453,7 @@ if(false) {
 }
 
 /***/ }),
-/* 209 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)(undefined);
@@ -26626,13 +25461,13 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".nav{\r\n    position: fixed;\r\n    width: 100%;\r\n    height: 10vh;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.hide{\r\n    display: none;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
+exports.push([module.i, ".nav{\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 10vh;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
 
 // exports
 
 
 /***/ }),
-/* 210 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26648,13 +25483,13 @@ var _react = __webpack_require__(7);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(211);
+__webpack_require__(210);
 
-var _detailHeader = __webpack_require__(213);
+var _detailHeader = __webpack_require__(212);
 
 var _detailHeader2 = _interopRequireDefault(_detailHeader);
 
-var _detailContent = __webpack_require__(216);
+var _detailContent = __webpack_require__(215);
 
 var _detailContent2 = _interopRequireDefault(_detailContent);
 
@@ -26693,13 +25528,13 @@ var Detail = function (_Component) {
 exports.default = Detail;
 
 /***/ }),
-/* 211 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(212);
+var content = __webpack_require__(211);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -26724,7 +25559,7 @@ if(false) {
 }
 
 /***/ }),
-/* 212 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)(undefined);
@@ -26738,7 +25573,7 @@ exports.push([module.i, "", ""]);
 
 
 /***/ }),
-/* 213 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26754,7 +25589,7 @@ var _react = __webpack_require__(7);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(214);
+__webpack_require__(213);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26811,13 +25646,13 @@ var Header = function (_Component) {
 exports.default = Header;
 
 /***/ }),
-/* 214 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(215);
+var content = __webpack_require__(214);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -26842,7 +25677,7 @@ if(false) {
 }
 
 /***/ }),
-/* 215 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)(undefined);
@@ -26856,7 +25691,7 @@ exports.push([module.i, ".detail-header{\r\n    height: 8vh;\r\n    background: 
 
 
 /***/ }),
-/* 216 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26874,15 +25709,15 @@ var _react2 = _interopRequireDefault(_react);
 
 __webpack_require__(36);
 
-var _bookContent = __webpack_require__(218);
+var _bookContent = __webpack_require__(217);
 
 var _bookContent2 = _interopRequireDefault(_bookContent);
 
-var _movieContent = __webpack_require__(219);
+var _movieContent = __webpack_require__(218);
 
 var _movieContent2 = _interopRequireDefault(_movieContent);
 
-var _musicContent = __webpack_require__(220);
+var _musicContent = __webpack_require__(219);
 
 var _musicContent2 = _interopRequireDefault(_musicContent);
 
@@ -26925,7 +25760,7 @@ var Content = function (_Component) {
 exports.default = Content;
 
 /***/ }),
-/* 217 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)(undefined);
@@ -26939,7 +25774,7 @@ exports.push([module.i, ".detail-content{\r\n    margin: 9vh 10px 0 10px;\r\n   
 
 
 /***/ }),
-/* 218 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27064,7 +25899,7 @@ var BookContent = function (_Component) {
 exports.default = BookContent;
 
 /***/ }),
-/* 219 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27180,7 +26015,7 @@ var MovieContent = function (_Component) {
 exports.default = MovieContent;
 
 /***/ }),
-/* 220 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27324,13 +26159,13 @@ var MusicContent = function (_Component) {
 exports.default = MusicContent;
 
 /***/ }),
-/* 221 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(222);
+var content = __webpack_require__(221);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -27355,12 +26190,12 @@ if(false) {
 }
 
 /***/ }),
-/* 222 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)(undefined);
 // imports
-exports.i(__webpack_require__(223), "");
+exports.i(__webpack_require__(222), "");
 
 // module
 exports.push([module.i, "body,ul,li,h1,h2,h3,h4,h5,p {\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\nbody{\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\nh1 {\r\n    text-align: center;\r\n    margin-top: 200px;\r\n}\r\n\r\n.app .false{\r\n    display: none;\r\n}", ""]);
@@ -27369,7 +26204,7 @@ exports.push([module.i, "body,ul,li,h1,h2,h3,h4,h5,p {\r\n    padding: 0;\r\n   
 
 
 /***/ }),
-/* 223 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)(undefined);
