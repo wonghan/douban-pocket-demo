@@ -22965,7 +22965,8 @@ var App = function (_Component) {
       datum: '',
       books: _books3.default.books,
       movies: _movies3.default.subjects,
-      musics: _musics3.default.musics
+      musics: _musics3.default.musics,
+      isShowNav: true
     };
     return _this;
   }
@@ -23099,6 +23100,20 @@ var App = function (_Component) {
       }
     }
   }, {
+    key: 'showNav',
+    value: function showNav() {
+      this.setState({
+        isShowNav: true
+      });
+    }
+  }, {
+    key: 'hideNav',
+    value: function hideNav() {
+      this.setState({
+        isShowNav: false
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var type = this.state.type;
@@ -23109,9 +23124,9 @@ var App = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: 'index' + ' ' + !this.state.pageType },
-          _react2.default.createElement(_indexSearch2.default, { type: type, onClickSearch: this.onClickSearch.bind(this) }),
+          _react2.default.createElement(_indexSearch2.default, { type: type, onClickSearch: this.onClickSearch.bind(this), showNav: this.showNav.bind(this), hideNav: this.hideNav.bind(this) }),
           _react2.default.createElement(_indexlist2.default, { type: type, data: data, onSearch: this.state.onSearch, pageChange: this.pageChange.bind(this), refresh: this.refresh.bind(this), load: this.load.bind(this) }),
-          _react2.default.createElement(_indexNav2.default, { onClickNav: this.onClickNav.bind(this), type: this.state.type })
+          _react2.default.createElement(_indexNav2.default, { onClickNav: this.onClickNav.bind(this), type: this.state.type, isShowNav: this.state.isShowNav })
         ),
         this.state.pageType && _react2.default.createElement(_detailPage2.default, { datum: this.state.datum, type: this.state.type, pageChange: this.pageChange.bind(this) })
       );
@@ -24576,6 +24591,12 @@ var Search = function (_Component) {
         { className: 'search' },
         _react2.default.createElement('i', { className: 'iconfont icon-search' }),
         _react2.default.createElement('input', { className: 'search-input', placeholder: placeholderMaps[index],
+          onFocus: function onFocus() {
+            _this2.props.hideNav();
+          },
+          onBlur: function onBlur() {
+            _this2.props.showNav();
+          },
           ref: function ref(input) {
             return _this2.input = input;
           } }),
@@ -24959,7 +24980,12 @@ var Item = function (_Component) {
   function Item() {
     _classCallCheck(this, Item);
 
-    return _possibleConstructorReturn(this, (Item.__proto__ || Object.getPrototypeOf(Item)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Item.__proto__ || Object.getPrototypeOf(Item)).call(this));
+
+    _this.state = {
+      windowWidth: window.innerWidth - 160
+    };
+    return _this;
   }
 
   _createClass(Item, [{
@@ -24969,11 +24995,11 @@ var Item = function (_Component) {
       var type = this.props.type;
       switch (type) {
         case 'book':
-          return _react2.default.createElement(_bookItem2.default, { datum: datum, pageChange: this.props.pageChange });
+          return _react2.default.createElement(_bookItem2.default, { datum: datum, pageChange: this.props.pageChange, windowWidth: this.state.windowWidth });
         case 'movie':
-          return _react2.default.createElement(_movieItem2.default, { datum: datum, pageChange: this.props.pageChange });
+          return _react2.default.createElement(_movieItem2.default, { datum: datum, pageChange: this.props.pageChange, windowWidth: this.state.windowWidth });
         case 'music':
-          return _react2.default.createElement(_musicItem2.default, { datum: datum, pageChange: this.props.pageChange });
+          return _react2.default.createElement(_musicItem2.default, { datum: datum, pageChange: this.props.pageChange, windowWidth: this.state.windowWidth });
       }
     }
   }]);
@@ -24992,7 +25018,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".item{\r\n    list-style: none;\r\n    display: flex;\r\n    border: 1px solid #dfdfdf;\r\n    margin: 10px;\r\n}\r\n.item-img{\r\n\twidth: 100px;\r\n    height: 140px;\r\n    margin: 10px;\r\n}\r\n.item-detail{\r\n    height: 140px;\r\n}\r\n.item-detail p{\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n    width: 200px;\r\n    margin: 9px;\r\n    height: 20px;\r\n}\r\n.item-detail .tag{\r\n    color: #fff;\r\n    padding: 1px 2px;\r\n    margin: 0 2px;\r\n    font-size: 16px;\r\n    border-radius: 2px;\r\n}\r\n.item-detail .book-tag{\r\n    background: #f3b500;\r\n}\r\n.item-detail .movie-tag{\r\n    background: #ff4245;\r\n}\r\n.item-detail .music-tag{\r\n    background: #43a4ff;\r\n}", ""]);
+exports.push([module.i, ".item{\r\n    list-style: none;\r\n    display: flex;\r\n    border: 1px solid #dfdfdf;\r\n    margin: 10px;\r\n}\r\n.item-img{\r\n\twidth: 100px;\r\n    height: 140px;\r\n    margin: 10px;\r\n}\r\n.item-detail{\r\n    height: 140px;\r\n}\r\n.item-detail p{\r\n    overflow: auto;\r\n    white-space: nowrap;\r\n    width: 200px;\r\n    margin: 9px;\r\n    height: 20px;\r\n}\r\n.item-detail .tag{\r\n    color: #fff;\r\n    padding: 1px 2px;\r\n    margin: 0 2px;\r\n    font-size: 16px;\r\n    border-radius: 2px;\r\n}\r\n.item-detail .book-tag{\r\n    background: #f3b500;\r\n}\r\n.item-detail .movie-tag{\r\n    background: #ff4245;\r\n}\r\n.item-detail .music-tag{\r\n    background: #43a4ff;\r\n}", ""]);
 
 // exports
 
@@ -25039,6 +25065,7 @@ var BookItem = function (_Component) {
       var _this2 = this;
 
       var datum = this.props.datum;
+      var windowWidth = this.props.windowWidth;
       return _react2.default.createElement(
         'li',
         { className: 'item', onClick: function onClick() {
@@ -25050,13 +25077,13 @@ var BookItem = function (_Component) {
           { className: 'item-detail' },
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u540D\u79F0\uFF1A',
             datum.title
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             datum.tags && datum.tags.map(function (item, index) {
               return _react2.default.createElement(
                 'span',
@@ -25067,19 +25094,19 @@ var BookItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u4F5C\u8005\uFF1A',
             datum.author
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u8BC4\u5206\uFF1A',
             datum.rating.average
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u65E5\u671F\uFF1A',
             datum.pubdate
           )
@@ -25135,6 +25162,7 @@ var MovieItem = function (_Component) {
       var _this2 = this;
 
       var datum = this.props.datum;
+      var windowWidth = this.props.windowWidth;
       return _react2.default.createElement(
         'li',
         { className: 'item', onClick: function onClick() {
@@ -25146,13 +25174,13 @@ var MovieItem = function (_Component) {
           { className: 'item-detail' },
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u540D\u79F0\uFF1A',
             datum.title
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             datum.genres && datum.genres.map(function (item, index) {
               return _react2.default.createElement(
                 'span',
@@ -25163,7 +25191,7 @@ var MovieItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u4F5C\u8005\uFF1A',
             datum.casts && datum.casts.map(function (item, index) {
               return _react2.default.createElement(
@@ -25176,7 +25204,7 @@ var MovieItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u8BC4\u5206\uFF1A',
             datum.rating.average
           )
@@ -25232,6 +25260,7 @@ var MusicItem = function (_Component) {
       var _this2 = this;
 
       var datum = this.props.datum;
+      var windowWidth = this.props.windowWidth;
       return _react2.default.createElement(
         'li',
         { className: 'item', onClick: function onClick() {
@@ -25243,13 +25272,13 @@ var MusicItem = function (_Component) {
           { className: 'item-detail' },
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u540D\u79F0\uFF1A',
             datum.title
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             datum.tags && datum.tags.map(function (item) {
               return _react2.default.createElement(
                 'span',
@@ -25260,7 +25289,7 @@ var MusicItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u4F5C\u8005\uFF1A',
             datum.author && datum.author.map(function (item, index) {
               return _react2.default.createElement(
@@ -25272,7 +25301,7 @@ var MusicItem = function (_Component) {
           ),
           _react2.default.createElement(
             'p',
-            null,
+            { style: { width: windowWidth } },
             '\u8BC4\u5206\uFF1A',
             datum.rating.average
           )
@@ -26511,7 +26540,7 @@ var Nav = function (_Component) {
       var type = this.props.type;
       return _react2.default.createElement(
         'div',
-        { className: 'nav' },
+        { className: this.props.isShowNav ? 'nav' : 'nav hide' },
         _react2.default.createElement(
           'div',
           { className: 'nav-item ' + (type === 'book' ? 'nav-item-selected' : ''), onClick: function onClick() {
@@ -26597,7 +26626,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".nav{\r\n    position: fixed;\r\n    width: 100%;\r\n    height: 10vh;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
+exports.push([module.i, ".nav{\r\n    position: fixed;\r\n    width: 100%;\r\n    height: 10vh;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.hide{\r\n    display: none;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
 
 // exports
 
