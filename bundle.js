@@ -23060,6 +23060,10 @@ var App = function (_Component) {
     value: function load(callback, error) {
       var _this5 = this;
 
+      if (this.state.keyword === '') {
+        error();
+        return;
+      }
       switch (this.state.type) {
         case 'book':
           var _books = this.state.books;
@@ -24645,7 +24649,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 70px;\r\n    padding: 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
+exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 70px;\r\n    padding: 10px 12px 0 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
 
 // exports
 
@@ -24786,7 +24790,7 @@ var List = function (_Component) {
 
     _this.state = {
       type: _this.props.type,
-      divHeight: window.innerHeight - 165
+      divHeight: window.innerHeight - 145
     };
     return _this;
   }
@@ -24815,11 +24819,15 @@ var List = function (_Component) {
        * 上拉加载
        */
       div.addEventListener('scroll', function () {
-        divScrollTop = div.scrollTop;
+        if (div.scrollTop > 2000) {
+          // 防止滑到底后跳到首部，被赋值为0
+          divScrollTop = div.scrollTop;
+        }
+        // console.log(divScrollTop)
         if (div.scrollHeight - div.scrollTop < 1000 && isLoad === false) {
+          downText.innerHTML = '正在加载';
           isLoad = true;
           self.props.load(scrollTo, downTextFinal);
-          downText.innerHTML = '正在加载';
           // 节流阀
           setTimeout(function () {
             isLoad = false;
@@ -24909,11 +24917,7 @@ var List = function (_Component) {
             data.map(function (item, index) {
               return _react2.default.createElement(_indexListItem2.default, { item: item, key: index, type: type, pageChange: _this2.props.pageChange });
             }),
-            _react2.default.createElement(
-              'div',
-              { id: 'downDiv' },
-              '\u6B63\u5728\u52A0\u8F7D'
-            )
+            _react2.default.createElement('div', { id: 'downDiv' })
           )
         )
       );
@@ -25477,7 +25481,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".nav{\r\n    /* position: absolute; */\r\n    width: 100%;\r\n    height: 70px;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
+exports.push([module.i, ".nav{\r\n    /* position: absolute; */\r\n    width: 100%;\r\n    height: 64px;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
 
 // exports
 
