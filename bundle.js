@@ -22965,8 +22965,7 @@ var App = function (_Component) {
       datum: '',
       books: _books3.default.books,
       movies: _movies3.default.subjects,
-      musics: _musics3.default.musics,
-      isLoad: false
+      musics: _musics3.default.musics
     };
     return _this;
   }
@@ -23063,46 +23062,38 @@ var App = function (_Component) {
         case 'book':
           var _books = this.state.books;
           (0, _fetch.fetchBooks)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
-            _this5.setState({
-              books: _books,
-              pageCount: _this5.state.pageCount + 1,
-              isLoad: true
-            });
             data.books && data.books.forEach(function (item, index) {
               _books.push(item);
             });
-          }).then(this.setState({
-            isLoad: false
-          }));
+            _this5.setState({
+              books: _books,
+              pageCount: _this5.state.pageCount + 1
+            });
+          });
           break;
         case 'movie':
           var _movies = this.state.movies;
           (0, _fetch.fetchMovies)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
-            _this5.setState({
-              movies: _movies,
-              pageCount: _this5.state.pageCount + 1,
-              isLoad: true
-            });
             data.subjects && data.subjects.forEach(function (item, index) {
               _movies.push(item);
-            }).then(_this5.setState({
-              isLoad: false
-            }));
+            });
+            _this5.setState({
+              movies: _movies,
+              pageCount: _this5.state.pageCount + 1
+            });
           });
           break;
         case 'music':
           var _musics = this.state.musics;
           (0, _fetch.fetchMusics)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
+            data.musics && data.musics.forEach(function (item, index) {
+              _musics.push(item);
+            });
             _this5.setState({
               musics: _musics,
               pageCount: _this5.state.pageCount + 1
             });
-            data.musics && data.musics.forEach(function (item, index) {
-              _musics.push(item);
-            });
-          }).then(this.setState({
-            isLoad: false
-          }));
+          });
           break;
       }
     }
@@ -23118,7 +23109,7 @@ var App = function (_Component) {
           'div',
           { className: 'index' + ' ' + !this.state.pageType },
           _react2.default.createElement(_indexSearch2.default, { type: type, onClickSearch: this.onClickSearch.bind(this) }),
-          _react2.default.createElement(_indexlist2.default, { type: type, data: data, onSearch: this.state.onSearch, pageChange: this.pageChange.bind(this), refresh: this.refresh.bind(this), load: this.load.bind(this), isLoad: this.state.isLoad }),
+          _react2.default.createElement(_indexlist2.default, { type: type, data: data, onSearch: this.state.onSearch, pageChange: this.pageChange.bind(this), refresh: this.refresh.bind(this), load: this.load.bind(this) }),
           _react2.default.createElement(_indexNav2.default, { onClickNav: this.onClickNav.bind(this), type: this.state.type })
         ),
         this.state.pageType && _react2.default.createElement(_detailPage2.default, { datum: this.state.datum, type: this.state.type, pageChange: this.pageChange.bind(this) })
@@ -24643,7 +24634,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 8vh;\r\n    padding: 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
+exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 70px;\r\n    padding: 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
 
 // exports
 
@@ -24783,7 +24774,8 @@ var List = function (_Component) {
     var _this = _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).call(this, props));
 
     _this.state = {
-      type: _this.props.type
+      type: _this.props.type,
+      divHeight: window.innerHeight - 165
     };
     return _this;
   }
@@ -24797,17 +24789,22 @@ var List = function (_Component) {
       var upText = document.getElementById('upDiv');
       var start = void 0; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
       var refresh = false;
+      var isLoad = false;
 
       /**
        * 上拉加载
        */
       div.addEventListener('scroll', function () {
-        console.log(div.scrollHeight - div.scrollTop);
-        if (div.scrollHeight - div.scrollTop < 1000 && self.props.isLoad === false) {
-          console.log(111);
+        if (div.scrollHeight - div.scrollTop < 1000 && isLoad === false) {
+          isLoad = true;
           self.props.load();
+          // 节流阀
+          setTimeout(function () {
+            isLoad = false;
+          }, 1000);
         }
       }, false);
+
       /**
        * 下拉刷新
        */
@@ -24821,6 +24818,7 @@ var List = function (_Component) {
         if (div.scrollTop <= 0) {
           // 如果ul列表到顶部，修改ul列表的偏移,显示“下拉刷新”，并准备触发下拉刷新功能，可自定义
           ul.style.top = ul.offsetTop + (touch.pageY - start) / 5 + 'px'; // ul.style.top = ul.offsetTop + 'px'
+          upText.innerHTML = "下拉刷新";
           start = touch.pageY;
           // 若ul偏移量过大,则修改文字,refresh置为true,配合'touchend'刷新
           if (ul.offsetTop >= 60) {
@@ -24838,7 +24836,7 @@ var List = function (_Component) {
             // 若ul的偏移量恢复，clearInterval
             if (ul.offsetTop <= 0) {
               clearInterval(time);
-              upText.innerHTML = "下拉刷新";
+              upText.innerHTML = "";
               // 若恢复时'refresh===true',刷新页面
               if (refresh) {
                 refresh = false;
@@ -24881,15 +24879,11 @@ var List = function (_Component) {
         // 设置滚动容器，其中id,height(滚动容器的高度)必须设置
         _react2.default.createElement(
           'div',
-          { id: 'wrappers', style: { height: window.innerHeight * 0.8 } },
+          { id: 'wrappers', style: { height: this.state.divHeight } },
           _react2.default.createElement(
             'ul',
             { className: 'list' },
-            _react2.default.createElement(
-              'div',
-              { id: 'upDiv' },
-              '\u4E0B\u62C9\u5237\u65B0'
-            ),
+            _react2.default.createElement('div', { id: 'upDiv' }),
             data.map(function (item, index) {
               return _react2.default.createElement(_indexListItem2.default, { item: item, key: index, type: type, pageChange: _this2.props.pageChange });
             }),
@@ -25461,7 +25455,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".nav{\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 10vh;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
+exports.push([module.i, ".nav{\r\n    /* position: absolute; */\r\n    width: 100%;\r\n    height: 70px;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
 
 // exports
 
