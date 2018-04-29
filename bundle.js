@@ -22961,7 +22961,9 @@ var App = function (_Component) {
       pageType: false,
       onSearch: false,
       keyword: '',
-      pageCount: 0,
+      pageCountBook: 0,
+      pageCountMovie: 0,
+      pageCountMusic: 0,
       datum: '',
       books: _books3.default.books,
       movies: _movies3.default.subjects,
@@ -23055,44 +23057,53 @@ var App = function (_Component) {
     }
   }, {
     key: 'load',
-    value: function load() {
+    value: function load(callback, error) {
       var _this5 = this;
 
       switch (this.state.type) {
         case 'book':
           var _books = this.state.books;
-          (0, _fetch.fetchBooks)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
+          (0, _fetch.fetchBooks)(this.state.keyword, this.state.pageCountBook + 1).then(function (data) {
             data.books && data.books.forEach(function (item, index) {
               _books.push(item);
             });
             _this5.setState({
               books: _books,
-              pageCount: _this5.state.pageCount + 1
+              pageCountBook: _this5.state.pageCountBook + 1
             });
+            callback();
+          }).catch(function (ex) {
+            error();
           });
           break;
         case 'movie':
           var _movies = this.state.movies;
-          (0, _fetch.fetchMovies)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
+          (0, _fetch.fetchMovies)(this.state.keyword, this.state.pageCountMovie + 1).then(function (data) {
             data.subjects && data.subjects.forEach(function (item, index) {
               _movies.push(item);
             });
             _this5.setState({
               movies: _movies,
-              pageCount: _this5.state.pageCount + 1
+              pageCountMovie: _this5.state.pageCountMovie + 1
             });
+            callback();
+          }).catch(function (ex) {
+            error();
           });
           break;
         case 'music':
           var _musics = this.state.musics;
-          (0, _fetch.fetchMusics)(this.state.keyword, this.state.pageCount + 1).then(function (data) {
+          (0, _fetch.fetchMusics)(this.state.keyword, this.state.pageCountMusic + 1).then(function (data) {
             data.musics && data.musics.forEach(function (item, index) {
               _musics.push(item);
             });
             _this5.setState({
               musics: _musics,
-              pageCount: _this5.state.pageCount + 1
+              pageCountMusic: _this5.state.pageCountMusic + 1
             });
+            callback();
+          }).catch(function (ex) {
+            error();
           });
           break;
       }
@@ -24787,21 +24798,32 @@ var List = function (_Component) {
       var ul = document.querySelector('.list'); // 获取ul列表
       var div = document.getElementById('wrappers'); // 获取包裹ul列表的div(css:  overflow:scroll;)
       var upText = document.getElementById('upDiv');
+      var downText = document.getElementById('downDiv');
       var start = void 0; // 辅助变量：触摸开始时，相对于文档顶部的Y坐标
       var refresh = false;
       var isLoad = false;
+      var divScrollTop = 0;
+      function scrollTo() {
+        // 使得添加LI后依旧在原高度，不会自动回到顶部
+        div.scrollTop = divScrollTop;
+      }
+      function downTextFinal() {
+        downText.innerHTML = '到底了';
+      }
 
       /**
        * 上拉加载
        */
       div.addEventListener('scroll', function () {
+        divScrollTop = div.scrollTop;
         if (div.scrollHeight - div.scrollTop < 1000 && isLoad === false) {
           isLoad = true;
-          self.props.load();
+          self.props.load(scrollTo, downTextFinal);
+          downText.innerHTML = '正在加载';
           // 节流阀
           setTimeout(function () {
             isLoad = false;
-          }, 1000);
+          }, 300);
         }
       }, false);
 
@@ -24890,7 +24912,7 @@ var List = function (_Component) {
             _react2.default.createElement(
               'div',
               { id: 'downDiv' },
-              '\u5230\u5E95\u4E86'
+              '\u6B63\u5728\u52A0\u8F7D'
             )
           )
         )
