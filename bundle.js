@@ -24649,7 +24649,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 70px;\r\n    padding: 10px 12px 0 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #43a4ff;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
+exports.push([module.i, ".search{\r\n    display: flex;\r\n    align-items: center;  \r\n    height: 70px;\r\n    padding: 10px 12px 0 12px;\r\n    z-index: 100;\r\n}\r\n.search .icon-search{\r\n    position: absolute;\r\n    font-size: 22px;\r\n    color: #999;\r\n    left: 16px;\r\n}\r\n.search-input{\r\n    height: 50px;\r\n    width: 100%;\r\n    border: 1px solid #dfdfdf;\r\n    padding-left: 32px;\r\n    padding-right: 70px;\r\n    font-size: 16px;\r\n}\r\n.search-btn{\r\n    position: absolute;\r\n    height: 52px;\r\n    width: 52px;\r\n    background: #00b51d;\r\n    border: none;\r\n    right: 12px;\r\n    color:#fff;\r\n    font-size: 14px;\r\n}", ""]);
 
 // exports
 
@@ -25057,7 +25057,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".item{\r\n    list-style: none;\r\n    display: flex;\r\n    border: 1px solid #dfdfdf;\r\n    margin: 10px;\r\n}\r\n.item-img{\r\n\twidth: 100px;\r\n    height: 140px;\r\n    margin: 10px;\r\n}\r\n.item-detail{\r\n    height: 140px;\r\n}\r\n.item-detail p{\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n    width: 200px;\r\n    margin: 9px;\r\n    height: 20px;\r\n}\r\n.item-detail .tag{\r\n    color: #fff;\r\n    padding: 1px 2px;\r\n    margin: 0 2px;\r\n    font-size: 16px;\r\n    border-radius: 2px;\r\n}\r\n.item-detail .book-tag{\r\n    background: #f3b500;\r\n}\r\n.item-detail .movie-tag{\r\n    background: #ff4245;\r\n}\r\n.item-detail .music-tag{\r\n    background: #43a4ff;\r\n}", ""]);
+exports.push([module.i, ".item{\r\n    list-style: none;\r\n    display: flex;\r\n    border: 1px solid #dfdfdf;\r\n    margin: 10px;\r\n}\r\n.item-img{\r\n\twidth: 100px;\r\n    height: 140px;\r\n    margin: 10px;\r\n}\r\n.item-detail{\r\n    height: 140px;\r\n}\r\n.item-detail p{\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n    width: 200px;\r\n    margin: 9px;\r\n    height: 20px;\r\n}\r\n.item-detail .tag{\r\n    color: #fff;\r\n    padding: 1px 2px;\r\n    margin: 0 2px;\r\n    font-size: 16px;\r\n    border-radius: 2px;\r\n}\r\n.item-detail .book-tag{\r\n    background: #f3b500;\r\n}\r\n.item-detail .movie-tag{\r\n    background: #ff4245;\r\n}\r\n.item-detail .music-tag{\r\n    background: #00b51d;\r\n}", ""]);
 
 // exports
 
@@ -25481,7 +25481,7 @@ exports = module.exports = __webpack_require__(14)(undefined);
 
 
 // module
-exports.push([module.i, ".nav{\r\n    /* position: absolute; */\r\n    width: 100%;\r\n    height: 64px;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #43a4ff;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
+exports.push([module.i, ".nav{\r\n    /* position: absolute; */\r\n    width: 100%;\r\n    height: 64px;\r\n    left: 0;\r\n    bottom: 0; \r\n    display: flex; \r\n    align-items: center;\r\n    background: #f6f6f6;\r\n    border-top: 1px solid #dfdfdf;\r\n    z-index: 100;\r\n}\r\n.nav-item{\r\n    flex: 1;\r\n    display: flex; \r\n    flex-direction: column;\r\n    align-items: center;\r\n}\r\n.nav-item-selected {\r\n\tcolor: #00b51d;\r\n}\r\n.nav-item-text{\r\n    font-size: 16px;\r\n}\r\n.nav .iconfont{\r\n    font-size: 24px;\r\n    line-height: 32px;\r\n}", ""]);
 
 // exports
 
